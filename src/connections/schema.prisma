@@ -18,11 +18,13 @@ model User {
   userPhoneNumber Int
   userEmail       String  @db.VarChar(255)
   userPassword    String  @db.VarChar(255)
-  roleId          BigInt
+  roleId          String  
+  userRol         UserRol @relation(fields: [roleId], references: [roleId])
 }
 
 model UserRol {
   roleId          String  @id @unique
   rolName         String  @db.VarChar(255)
   rolDescription  String  @db.VarChar(255)
+  users           User[]
 }
