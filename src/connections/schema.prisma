@@ -14,17 +14,17 @@ model User {
   userId          BigInt  @id @unique
   userName        String  @db.VarChar(255)
   userLastname    String  @db.VarChar(255)
-  userDNI         String  @db.VarChar(255)
-  userPhoneNumber Int
+  userDNI         Int
+  userPhoneNumber String  @db.VarChar(255)
   userEmail       String  @db.VarChar(255)
   userPassword    String  @db.VarChar(255)
   roleId          String  
-  userRol         UserRol @relation(fields: [roleId], references: [roleId])
+  role            Role @relation(fields: [roleId], references: [roleId])
 }
 
-model UserRol {
-  roleId          String  @id @unique
-  rolName         String  @db.VarChar(255)
-  rolDescription  String  @db.VarChar(255)
-  users           User[]
+model Role {
+  roleId           String  @id @unique
+  roleName         String  @db.VarChar(255)
+  roleDescription  String  @db.VarChar(255)
+  users            User[]
 }

@@ -1,27 +1,35 @@
 import { Request, Response } from "express"
-import UserUseCase from "../core/user/application/user.usecase"
+import CreateRestaurantOwner from "../core/user/application/create.restaurant.owner"
 import UserPrismaRepository from "../core/user/infraestructure/user.prisma.repository"
 
-const userUserCase = new UserUseCase(new UserPrismaRepository)
+const createRestaurantOwner = new CreateRestaurantOwner(new UserPrismaRepository)
 
-export const addNewOwnerRestaurant = async (req: Request, res: Response) => {
-    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId} = req.body
+export const createNewRestaurantOwner = async (req: Request, res: Response) => {
+    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
 
     try {
-        const newOwnerRestaurantAdded = await userUserCase.addNewOwnerRestaurant(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
+        const newOwnerRestaurantAdded = await createRestaurantOwner.createRestaurantOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
         
         res.status(201).json({
             status: "OK",
             message: "El nuevo propietario se ha añadido con exito",
-            data: newOwnerRestaurantAdded.userId.toString()
+            data: {
+                userId: newOwnerRestaurantAdded?.userId.toString(),
+                userName: newOwnerRestaurantAdded?.userName,
+                userLastname: newOwnerRestaurantAdded?.userLastname,
+                userDNI: newOwnerRestaurantAdded?.userDNI,
+                userPhoneNumber: newOwnerRestaurantAdded?.userPhoneNumber,
+                userEmail: newOwnerRestaurantAdded?.userEmail,
+                userPassword: newOwnerRestaurantAdded?.userPassword,
+                roleId: newOwnerRestaurantAdded?.roleId
+            }
         })
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        console.log(error);
         
-        res.status(404).json({
+        res.status(500).json({
             status: "Fail",
-            message: "El nuevo propietario no se ha añadido con exito",
-            data: ""
+            message: error.message,
         })
     }
 }

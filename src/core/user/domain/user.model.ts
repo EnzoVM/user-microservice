@@ -1,19 +1,17 @@
-import {v4 as uuid} from 'uuid'
-import IUser from './user.interface'
-import BN from 'bn.js'
+import {v4 as uuidv4} from 'uuid'
 
-export default class User implements IUser{
+export default class User{
     userId: bigint
     userName: string
     userLastname: string
-    userDNI: string
-    userPhoneNumber: number
+    userDNI: number
+    userPhoneNumber: string
     userEmail: string
     userPassword: string
     roleId: string
     
-    constructor(userName: string, userLastname: string, userDNI: string, userPhoneNumber: number, userEmail: string, userPassword: string, roleId: string){
-        this.userId = BigInt(new BN(require('crypto').randomBytes(8)).toString()),
+    constructor(userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, roleId: string){
+        this.userId = BigInt.asUintN(64, BigInt(`0x${Buffer.from(uuidv4()).toString('hex')}`)),
         this.userName = userName,
         this.userLastname = userLastname,
         this.userDNI = userDNI,

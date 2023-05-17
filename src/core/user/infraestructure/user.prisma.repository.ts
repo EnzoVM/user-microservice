@@ -5,8 +5,8 @@ import User from "../domain/user.model";
 
 export default class UserPrismaRepository implements UserRepository{
     
-    async addOwnerRestaurant (user: User) {
-        const ownerResturantAdded = await prisma.user.create({
+    async insertRestaurantOwner (user: User) {
+        const restaurantOwnerSaved = await prisma.user.create({
             data: {
                 userId: user.userId,
                 userName: user.userName,
@@ -19,6 +19,6 @@ export default class UserPrismaRepository implements UserRepository{
             }
         })
         
-        return ownerResturantAdded
+        return restaurantOwnerSaved
     }
 }

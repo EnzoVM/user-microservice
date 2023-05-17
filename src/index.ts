@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express'
 import morgan from 'morgan'
 import userRoutes from './routes/user.routes'
+import roleRoutes from './routes/role.routes'
 const app = express()
 
 app.set('PORT', process.env.PORT || 3000)
@@ -14,6 +15,7 @@ app.get('/', (request: Request, response: Response) =>{
 })
 
 app.use('/api/v1/user', userRoutes)
+app.use('/api/v1/role', roleRoutes)
 
 app.listen(app.get('PORT'), ()=>{
     console.log(`Server running on port ${app.get('PORT')}`);
