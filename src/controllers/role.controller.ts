@@ -16,10 +16,8 @@ export const createNewRole = async (req: Request, res: Response) => {
             message: "El nuevo rol se ha añadido con exito",
             data: newRoleAdded
         })
-    } catch (error: any) {
-        console.log(error);
-        
-        res.status(500).json({
+    } catch (error: any) { 
+        res.status(400).json({
             status: "Fail",
             message: error.message,
         })
@@ -37,9 +35,7 @@ export const getIdByName = async (req: Request, res: Response) => {
             data: roleFound
         })
     } catch (error: any) {
-        console.log(error)
-
-        res.status(500).json({
+        res.status(400).json({
             status: "Fail",
             message: error.message,
         })

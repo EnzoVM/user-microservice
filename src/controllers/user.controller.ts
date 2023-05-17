@@ -12,7 +12,7 @@ export const createNewRestaurantOwner = async (req: Request, res: Response) => {
         
         res.status(201).json({
             status: "OK",
-            message: "El nuevo propietario se ha añadido con exito",
+            message: "The new restaurant owner has been inserted successfully",
             data: {
                 userId: newOwnerRestaurantAdded?.userId.toString(),
                 userName: newOwnerRestaurantAdded?.userName,
@@ -25,9 +25,8 @@ export const createNewRestaurantOwner = async (req: Request, res: Response) => {
             }
         })
     } catch (error: any) {
-        console.log(error);
         
-        res.status(500).json({
+        res.status(400).json({
             status: "Fail",
             message: error.message,
         })
