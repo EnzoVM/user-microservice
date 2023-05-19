@@ -16,7 +16,7 @@ export default class RolePrismaRepository implements RoleRepository{
     }
 
     async getIdByRoleName (roleName: string) {
-        const roleFound = await prisma.role.findFirst({
+        const roleIdFound = await prisma.role.findFirst({
             where:{
                 roleName
             },
@@ -25,7 +25,21 @@ export default class RolePrismaRepository implements RoleRepository{
             }
         })
 
-        if(!roleFound){return null}
-        return roleFound.roleId
+        if(!roleIdFound){return null}
+        return roleIdFound.roleId
+    }
+
+    async getRoleNameById (roleId: string) {
+        const roleNameFound = await prisma.role.findFirst({
+            where: {
+                roleId
+            },
+            select: {
+                roleName: true
+            }
+        })
+
+        if(!roleNameFound){return null}
+        return roleNameFound.roleName
     }
 }

@@ -1,35 +1,9 @@
 import index from '../src/index'
 import request from 'supertest'
+import {dataUserValidate, dataUserMissing} from './helpers/user.helps'
 
 const {app, server} = index
 const api = request(app)
-
-const dataUserValidate = [
-    {
-        userName: "Luis",
-        userLastname:"Gonzales",
-        userDNI: 74563334,
-        userPhoneNumber: "+345678546789",
-        userEmail:  "luisprugmail.com", //Email validate is wrong
-        userPassword: "passwordPrueba"
-    },
-    {
-        userName: "Jose",
-        userLastname:"Diaz",
-        userDNI: 75434563,
-        userPhoneNumber: "+34567854678954", //phoneNumber have more than 13 characteres
-        userEmail:  "joseprueba@gmail.com",
-        userPassword: "passwordPrueba"
-    },
-    {
-        userName: "Maria",
-        userLastname:"Rosa",
-        userDNI: "73456789",  //DNI is not a number
-        userPhoneNumber: "+345678546789",
-        userEmail:  "mariaprueba@gmail.com",
-        userPassword: "passwordPrueba"
-    }
-]
 
 describe('POST /createOwner', () => {
 
@@ -47,23 +21,22 @@ describe('POST /createOwner', () => {
         expect(response.body.data.userName).toStrictEqual("Luis")
     })
 
-    test('When data user is missing ', async () => {
-        const response = await api.post('/api/v1/user/createOwner').send({})
-            .expect('Content-Type', /application\/json/)
-            .expect(400)
-    
-        console.log(response.body);
-    
-        expect(response.body.message).toStrictEqual("Data is missing")
+    test('When one field or all fields are missing', async () => {
+        for (const dataUser of dataUserMissing){
+            const response = await api.post('/api/v1/user/createOwner').send(dataUser)
+                .expect('Content-Type', /application\/json/)
+                .expect(400)
+
+            expect(response.body.message).toStrictEqual("Data is missing")
+        }
     })
 
     test('When email/phoneNumber/DNI validate is wrong ', async () => {
-        for (const body of dataUserValidate) {
-            const response = await api.post('/api/v1/user/createOwner').send(body)
+        for (const dataUser of dataUserValidate) {
+            const response = await api.post('/api/v1/user/createOwner').send(dataUser)
                 .expect('Content-Type', /application\/json/)
                 .expect(400)
-            
-            console.log(response.body);
+                
             expect(response.body.message).toStrictEqual("You have to specify the requested data")
         } 
     })

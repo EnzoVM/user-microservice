@@ -21,4 +21,19 @@ export default class UserPrismaRepository implements UserRepository{
         
         return restaurantOwnerSaved
     }
+
+    async getRoleIdUserByIdentification (userId: bigint) {
+        const userFound = await prisma.user.findUnique({
+            where: {
+                userId
+            },
+            select: {
+                roleId: true
+            }
+        })
+
+        if(!userFound) {return null}
+
+        return userFound.roleId
+    }
 }

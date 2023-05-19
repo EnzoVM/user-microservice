@@ -2,7 +2,7 @@ import User from "../domain/user.model";
 import UserRepository from "../domain/user.repository";
 import bcrypt from 'bcrypt'
 import UserDTO from "../domain/user.dto";
-import { isEmpty,validate } from "class-validator";
+import { validate } from "class-validator";
 import GetIdByRoleName from "../../role/application/get.id.by.role.name";
 import RolePrismaRepository from "../../role/infraestructure/role.prisma.repository";
 
@@ -17,7 +17,7 @@ export default class CreateRestaurantOwner {
 
     async createRestaurantOwner (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
         
-        if(!userName && !userLastname && !userDNI && !userPhoneNumber && !userEmail && !userPassword){
+        if(!userName || !userLastname || !userDNI || !userPhoneNumber || !userEmail || !userPassword){
             throw new Error ('Data is missing')
         }
 
