@@ -2,7 +2,8 @@ import User from "./user.model";
 
 export default interface UserRepository {
 
-    insertRestaurantOwner: (user: User) => Promise<User>
+    insertUser: (user: User) => Promise<User>
     getRoleIdUserByIdentification: (userId: bigint) => Promise<string | null>
-
+    loginUser: (userEmail: string) => Promise<User | null>
+    
 }

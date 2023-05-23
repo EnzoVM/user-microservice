@@ -1,16 +1,18 @@
 import { Request, Response } from "express"
-import CreateRestaurantOwner from "../core/user/application/create.restaurant.owner"
-import UserPrismaRepository from "../core/user/infraestructure/user.prisma.repository"
+import CreateUser from "../core/user/application/create.user"
+import UserPrismaRepository from "../core/user/infraestructure/prisma/user.prisma.repository"
 import GetRoleIdUserByIdentification from "../core/user/application/get.role.user.by.id"
+import LoginUser from "../core/user/application/login.user"
 
-const createRestaurantOwner = new CreateRestaurantOwner(new UserPrismaRepository)
+const createUser = new CreateUser(new UserPrismaRepository)
 const getRoleIdUserByIdentification = new GetRoleIdUserByIdentification(new UserPrismaRepository)
+const loginUser = new LoginUser(new UserPrismaRepository)
 
 export const createNewRestaurantOwner = async (req: Request, res: Response) => {
     const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
 
     try {
-        const newOwnerRestaurantAdded = await createRestaurantOwner.createRestaurantOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
+        const newOwnerRestaurantAdded = await createUser.createRestaurantOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
         
         res.status(201).json({
             status: "OK",
@@ -24,6 +26,36 @@ export const createNewRestaurantOwner = async (req: Request, res: Response) => {
                 userEmail: newOwnerRestaurantAdded?.userEmail,
                 userPassword: newOwnerRestaurantAdded?.userPassword,
                 roleId: newOwnerRestaurantAdded?.roleId
+            }
+        })
+    } catch (error: any) {
+        
+        res.status(400).json({
+            status: "Fail",
+            message: error.message,
+        })
+    }
+}
+
+
+export const createNewRestaurantEmployee = async (req: Request, res: Response) => {
+    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId} = req.body
+
+    try {
+        const newRestaurantEmployeeAdded = await createUser.createRestaurantEmployee(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId)
+        
+        res.status(201).json({
+            status: "OK",
+            message: "The new restaurant employee has been inserted successfully",
+            data: {
+                userId: newRestaurantEmployeeAdded?.userId.toString(),
+                userName: newRestaurantEmployeeAdded?.userName,
+                userLastname: newRestaurantEmployeeAdded?.userLastname,
+                userDNI: newRestaurantEmployeeAdded?.userDNI,
+                userPhoneNumber: newRestaurantEmployeeAdded?.userPhoneNumber,
+                userEmail: newRestaurantEmployeeAdded?.userEmail,
+                userPassword: newRestaurantEmployeeAdded?.userPassword,
+                roleId: newRestaurantEmployeeAdded?.roleId
             }
         })
     } catch (error: any) {
@@ -54,4 +86,25 @@ export const getRoleUserById = async (req: Request, res: Response) => {
         })
     }
 
+}
+
+export const login = async (req: Request, res: Response) => {
+    const {userEmail, userPassword} = req.body
+
+    try {
+        const userToken: {userId: bigint, userRole: string} = await loginUser.login(userEmail, userPassword)
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'The user has successfully logged in',
+            data: userToken
+        })
+
+    } catch (error: any) {
+        
+        res.status(400).json({
+            status: 'Fail',
+            message: error.message
+        })
+    }
 }

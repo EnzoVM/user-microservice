@@ -1,12 +1,12 @@
-import prisma from "../../../connections/prisma.connection";
-import UserRepository from "../domain/user.repository";
-import User from "../domain/user.model";
+import prisma from "../../../../connections/prisma.connection";
+import UserRepository from "../../domain/user.repository";
+import User from "../../domain/user.model";
 
 
 export default class UserPrismaRepository implements UserRepository{
     
-    async insertRestaurantOwner (user: User) {
-        const restaurantOwnerSaved = await prisma.user.create({
+    async insertUser (user: User) {
+        const userSaved = await prisma.user.create({
             data: {
                 userId: user.userId,
                 userName: user.userName,
@@ -19,7 +19,7 @@ export default class UserPrismaRepository implements UserRepository{
             }
         })
         
-        return restaurantOwnerSaved
+        return userSaved
     }
 
     async getRoleIdUserByIdentification (userId: bigint) {
@@ -35,5 +35,15 @@ export default class UserPrismaRepository implements UserRepository{
         if(!userFound) {return null}
 
         return userFound.roleId
+    }
+
+    async loginUser (userEmail: string) {
+        const userFound = await prisma.user.findFirst({
+            where: {
+                userEmail
+            }
+        })
+
+        return userFound
     }
 }

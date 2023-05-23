@@ -1,4 +1,5 @@
 import {v4 as uuidv4} from 'uuid'
+import bcrypt from 'bcrypt'
 
 export default class User{
     userId: bigint
@@ -17,7 +18,7 @@ export default class User{
         this.userDNI = userDNI,
         this.userPhoneNumber = userPhoneNumber,
         this.userEmail = userEmail,
-        this.userPassword = userPassword
+        this.userPassword = bcrypt.hashSync(userPassword, 10)
         this.roleId = roleId
     }
 }
