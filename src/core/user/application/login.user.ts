@@ -1,10 +1,10 @@
 import UserRepository from "../domain/user.repository"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import GetRoleUserByIdentification from "./get.role.user.by.id"
+import GetUserRoleById from "./get.user.role.by.id"
 import UserPrismaRepository from "../infraestructure/prisma/user.prisma.repository"
 
-const getRoleUserByIdentification = new GetRoleUserByIdentification(new UserPrismaRepository)
+const getUserRoleById = new GetUserRoleById(new UserPrismaRepository)
 
 export default class LoginUser {
     private readonly userRepository: UserRepository
@@ -30,7 +30,7 @@ export default class LoginUser {
         }
         
         //Get role user
-        const userRole = await getRoleUserByIdentification.getRoleUserById(userFound.userId)
+        const userRole = await getUserRoleById.getUserRoleById(userFound.userId)
 
         const userToken = jwt.sign({
             userId: userFound.userId.toString(),

@@ -1,4 +1,4 @@
-import RoleRepositury from "../domain/role.repository";
+import RoleRepositury from "../domain/role.repository"
 
 export default class GetRoleNameById {
     private readonly roleRepository: RoleRepositury

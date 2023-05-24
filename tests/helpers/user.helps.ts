@@ -1,6 +1,6 @@
 
 //Array for data testing
-export const dataUserMissing = [
+export const dataOwnerUserMissing = [
     {
         //All the data is missing
     },
@@ -55,9 +55,94 @@ export const dataUserMissing = [
 ]
 
 
+export const dataEmployeeUserMissing = [
+    {
+        //All the data is missing
+    },
+    {
+        //The userName is missing
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The userLastname is missing
+        userName: "EmployeePrueba100",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The userDNI is missing
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The PhoneNumber is missing
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The email is missing
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The password is missing
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        //The restaurant id is missing
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba"
+    }
+]
+
+
+export const dataForLoginMissing = [
+    {
+        //All the data is missing
+    },
+    {
+        //The email user is missing
+        userPassword: "1234567"
+    },
+    {
+        //The password user is missing
+        userEmail: "admin@gmail.com",
+    }
+]
+
+
 
 //Array for validate testing
-export const dataUserValidate = [
+export const dataOwnerUserValidate = [
     {
         userName: "Luis",
         userLastname:"Gonzales",
@@ -81,5 +166,35 @@ export const dataUserValidate = [
         userPhoneNumber: "+345678546789",
         userEmail:  "mariaprueba@gmail.com",
         userPassword: "passwordPrueba"
+    }
+]
+
+export const dataEmployeeUserValidate = [
+    {
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employeegmail.com",  //Email validate is wrong
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: 73452345,
+        userPhoneNumber: "+34567854678956",  //phoneNumber have more than 13 characteres
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
+    },
+    {
+        userName: "EmployeePrueba100",
+        userLastname:"employeelastname",
+        userDNI: "73452345",   //DNI is not a number
+        userPhoneNumber: "+345678546789",
+        userEmail:  "employee@gmail.com",
+        userPassword: "passwordPrueba",
+        restaurantId: "08f71c12-407f-44fa-a287-8ae32fef9e0b"
     }
 ]

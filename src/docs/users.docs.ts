@@ -1,11 +1,14 @@
 
-
 //EndPoints
-
-const createRestaurantOwner = {
+const createOwner = {
     tags: ['Users'],
     summary: 'Insert a new owner by admin',
-    description: 'This endpoint is for insert a new restaurant owner by administrator',
+    description: 'This endpoint is for insert a new owner by administrator',
+    security: [
+        {
+            tokenForCreateOwner: []
+        }
+    ],
     requestBody: {
         required: true,
         content: {
@@ -60,7 +63,7 @@ const createRestaurantOwner = {
             content: {
                 'application/json': {
                     schema: {
-                        $ref: '#/components/schemas/responseCreateRestaurantOwner'
+                        $ref: '#/components/schemas/responseCreateOwner'
                     }
                 }
             }
@@ -69,9 +72,142 @@ const createRestaurantOwner = {
 }
 
 
-//Schemas of responses
+const createEmployee = {
+    tags: ['Users'],
+    summary: 'Insert a new employee by owner',
+    description: 'This endpoint is for insert a new employee by owner',
+    security: [
+        {
+            tokenForCreateEmployee: []
+        }
+    ],
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        userName: {
+                            type: 'string',
+                            description: 'Name of the new employee',
+                            require: true,
+                            example: 'Julio'
+                        },
+                        userLastname: {
+                            type: 'string',
+                            description: 'Lastname of the new employee',
+                            require: true,
+                            example: 'Iglesias'
+                        },
+                        userDNI: {
+                            type: 'number',
+                            description: 'DNI of the new employee',
+                            require: true,
+                            example: 73456543
+                        },
+                        userPhoneNumber: {
+                            type: 'string',
+                            description: 'PhoneNumber of the new employee',
+                            require: true,
+                            example: '+745345645645'
+                        },
+                        userEmail: {
+                            type: "string",
+                            description: 'Email of the new employee',
+                            require: true,
+                            example: 'julioiglesias@gmail.com'
+                        },
+                        userPassword: {
+                            type: 'string',
+                            description: 'Password of the new employee',
+                            require: true,
+                            example: 'passwordPrueba'
+                        },
+                        restaurantId: {
+                            type: 'string',
+                            description: 'Restaurant id of the new employee',
+                            require: true,
+                            example: '08f71c12-407f-44fa-a287-8ae32fef9e0b'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    responses: {
+        '201': {
+            description: 'Results for creating a new employee',
+            content: {
+                'application/json': {
+                    schema: {
+                        $ref: '#/components/schemas/responseCreateEmployee'
+                    }
+                }
+            }
+        }
+    }
+}
 
-const responseCreateRestaurantOwner = {
+const loginUser = {
+    tags: ['Users'],
+    summary: 'Login users',
+    description: 'This endpoint is for login users',
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        userEmail: {
+                            type: 'string',
+                            description: 'Email of the user',
+                            require: true,
+                            example: 'admin@gmail.com'
+                        },
+                        userPassword: {
+                            type: 'string',
+                            description: 'Password of the user',
+                            require: true,
+                            example: '1234567'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    responses: {
+        '201': {
+            description: 'Results for login users',
+            content: {
+                'application/json': {
+                    schema: {
+                        $ref: '#/components/schemas/responseLoginUser'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//Schemas
+const tokenForCreateOwner = {
+    type: 'http',
+    scheme: 'bearer',
+    description: 'Use this admin token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4'
+}
+
+const tokenForCreateEmployee = {
+    type: 'http',
+    scheme: 'bearer',
+    description: 'Use this owner token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjgzNzUxMDEwMzAwNjMxMTIzIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NDgwODM4MH0.lmWBJTH9oet9uh0uBfwl4Fs-xseXDmbQT9Xk7J78jso',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjgzNzUxMDEwMzAwNjMxMTIzIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NDgwODM4MH0.lmWBJTH9oet9uh0uBfwl4Fs-xseXDmbQT9Xk7J78jso'
+}
+
+const responseCreateOwner = {
     type: 'object',
     properties: {
         status: {
@@ -84,7 +220,7 @@ const responseCreateRestaurantOwner = {
             type: 'string',
             description: 'Message of the response',
             require: true,
-            example: 'The new restaurant owner has been inserted successfully'
+            example: 'The new owner has been inserted successfully'
         },
         data: {
             type: 'object',
@@ -104,6 +240,63 @@ const responseCreateRestaurantOwner = {
     }
 }
 
+const responseCreateEmployee = {
+    type: 'object',
+    properties: {
+        status: {
+            type: 'string',
+            description: 'State code of the response',
+            require: true,
+            example: 'OK'
+        },
+        message: {
+            type: 'string',
+            description: 'Message of the response',
+            require: true,
+            example: 'The new employee has been inserted successfully'
+        },
+        data: {
+            type: 'object',
+            description: 'Data of the response',
+            require: true,
+            example: {
+                userId: "3473458804721858401",
+                userName: "EmployeePrueba",
+                userLastname: "employee",
+                userDNI: 74563334,
+                userPhoneNumber: "+345678546789",
+                userEmail: "employee@gmail.com",
+                userPassword: "$2b$10$hhpEWiSsQu3XQHyhoxLAo.uaIMRqtZGL9uTMYFB2qru4mMywARYdK",
+                roleId: "8f323445-48ea-4067-8a13-e8fa1f746e95"
+            }
+        }
+    }
+}
+
+const responseLoginUser = {
+    type: 'object',
+    properties: {
+        status: {
+            type: 'string',
+            description: 'State code of the response',
+            require: true,
+            example: 'OK'
+        },
+        message: {
+            type: 'string',
+            description: 'Message of the response',
+            require: true,
+            example: 'The user has successfully logged in'
+        },
+        data: {
+            type: 'string',
+            description: 'Data of the response',
+            require: true,
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODEzOTQ0fQ.38dtD5INvif9VuRSBpe9gEQlCbX42wojbHnXaBee8Ic'
+        }
+    }
+}
 
 
-export {createRestaurantOwner, responseCreateRestaurantOwner}
+
+export {tokenForCreateOwner,tokenForCreateEmployee, createOwner, responseCreateOwner, createEmployee, responseCreateEmployee, loginUser, responseLoginUser}

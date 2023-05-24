@@ -1,5 +1,13 @@
 import swaggerJSDoc, {OAS3Definition, OAS3Options} from "swagger-jsdoc";
-import { createRestaurantOwner, responseCreateRestaurantOwner } from "./users.docs";
+import {
+tokenForCreateOwner,
+tokenForCreateEmployee,
+createOwner, 
+responseCreateOwner, 
+createEmployee, 
+responseCreateEmployee,
+loginUser,
+responseLoginUser} from "./users.docs";
 
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
@@ -23,13 +31,25 @@ const swaggerDefinition: OAS3Definition = {
         }
     ],
     paths: {
-        '/api/v1/user/createOwner':{
-            post: createRestaurantOwner
+        '/api/v1/users/createOwner':{
+            post: createOwner
+        },
+        '/api/v1/users/createEmployee':{
+            post: createEmployee
+        },
+        '/api/v1/users/login':{
+            post: loginUser
         }
     },
     components: {
+        securitySchemes: {
+            tokenForCreateOwner,
+            tokenForCreateEmployee
+        },
         schemas:{
-            responseCreateRestaurantOwner
+            responseCreateOwner,
+            responseCreateEmployee,
+            responseLoginUser
         }   
     }
 }

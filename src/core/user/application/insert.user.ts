@@ -4,18 +4,20 @@ import UserDTO from "../domain/user.dto";
 import { validate } from "class-validator";
 import GetIdByRoleName from "../../role/application/get.id.by.role.name";
 import RolePrismaRepository from "../../role/infraestructure/role.prisma.repository";
-import { addRestaurantEmployee } from "../infraestructure/services/restaurant.service";
+import UserServiceRepository from "../domain/user.service.repository";
 
 const getIdByRoleName = new GetIdByRoleName(new RolePrismaRepository)
 
-export default class CreateUser {
+export default class InsertUser {
     private readonly userRepository: UserRepository
+    private readonly userServiceRepository: UserServiceRepository
 
-    constructor(userRepository){
-        this.userRepository = userRepository
+    constructor(userRepository: UserRepository, userServiceRepository: UserServiceRepository){
+        this.userRepository = userRepository,
+        this.userServiceRepository = userServiceRepository
     }
 
-    async createRestaurantOwner (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
+    async createOwner (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
         
         if(!userName || !userLastname || !userDNI || !userPhoneNumber || !userEmail || !userPassword){
             throw new Error ('Data is missing')
@@ -27,17 +29,17 @@ export default class CreateUser {
         }
         
         const roleId = await getIdByRoleName.getIdByRoleName("Owner")
-
-        if(roleId !== null){
-            const newOwnerRestaurant = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
-            const ownerRestaurantAdded = await this.userRepository.insertUser(newOwnerRestaurant)
-            return ownerRestaurantAdded
+        if(roleId === null){
+            throw new Error('Owner role does not exist')
         }
-        
+
+        const newOwnerRestaurant = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
+        const ownerRestaurantAdded = await this.userRepository.insertUser(newOwnerRestaurant)
+        return ownerRestaurantAdded
     }
 
 
-    async createRestaurantEmployee (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, restaurantId: string){
+    async createEmployee (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, restaurantId: string){
         
         if(!userName || !userLastname || !userDNI || !userPhoneNumber || !userEmail || !userPassword || !restaurantId){
             throw new Error ('Data is missing')
@@ -57,7 +59,8 @@ export default class CreateUser {
         const restaurantEmployeeAdded = await this.userRepository.insertUser(newRestaurantEmployee)
 
         //Insert an employee in a restaurant
-        await addRestaurantEmployee(restaurantId, restaurantEmployeeAdded.userId.toString())
+        const message = await this.userServiceRepository.addRestaurantEmployee(restaurantId, restaurantEmployeeAdded.userId.toString())
+        console.log(message);
         
         return restaurantEmployeeAdded
         

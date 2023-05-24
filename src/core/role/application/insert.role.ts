@@ -8,7 +8,7 @@ export default class InsertRole {
         this.roleRepository = roleRepository
     }
     
-    async insertNewRole (roleName: string, roleDescription: string) {
+    async createRole (roleName: string, roleDescription: string) {
         const roleCreated = new Role(roleName, roleDescription)
         const newRoleCreated = await this.roleRepository.insertRole(roleCreated)
         return newRoleCreated

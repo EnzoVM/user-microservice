@@ -1,18 +1,19 @@
 import { Request, Response } from "express"
-import CreateUser from "../core/user/application/create.user"
-import UserPrismaRepository from "../core/user/infraestructure/prisma/user.prisma.repository"
-import GetRoleIdUserByIdentification from "../core/user/application/get.role.user.by.id"
+import InsertUser from "../core/user/application/insert.user"
+import GetUserRoleById from "../core/user/application/get.user.role.by.id"
 import LoginUser from "../core/user/application/login.user"
+import UserPrismaRepository from "../core/user/infraestructure/prisma/user.prisma.repository"
+import RestaurantServiceRepository from "../core/user/infraestructure/services/restaurant.service.repository"
 
-const createUser = new CreateUser(new UserPrismaRepository)
-const getRoleIdUserByIdentification = new GetRoleIdUserByIdentification(new UserPrismaRepository)
+const insertUser = new InsertUser(new UserPrismaRepository, new RestaurantServiceRepository)
+const getUserRoleById = new GetUserRoleById(new UserPrismaRepository)
 const loginUser = new LoginUser(new UserPrismaRepository)
 
-export const createNewRestaurantOwner = async (req: Request, res: Response) => {
+export const createNewOwner = async (req: Request, res: Response) => {
     const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
 
     try {
-        const newOwnerRestaurantAdded = await createUser.createRestaurantOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
+        const newOwnerRestaurantAdded = await insertUser.createOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
         
         res.status(201).json({
             status: "OK",
@@ -29,7 +30,7 @@ export const createNewRestaurantOwner = async (req: Request, res: Response) => {
             }
         })
     } catch (error: any) {
-        
+
         res.status(400).json({
             status: "Fail",
             message: error.message,
@@ -38,11 +39,11 @@ export const createNewRestaurantOwner = async (req: Request, res: Response) => {
 }
 
 
-export const createNewRestaurantEmployee = async (req: Request, res: Response) => {
+export const createNewEmployee = async (req: Request, res: Response) => {
     const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId} = req.body
 
     try {
-        const newRestaurantEmployeeAdded = await createUser.createRestaurantEmployee(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId)
+        const newRestaurantEmployeeAdded = await insertUser.createEmployee(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId)
         
         res.status(201).json({
             status: "OK",
@@ -67,11 +68,11 @@ export const createNewRestaurantEmployee = async (req: Request, res: Response) =
     }
 }
 
-export const getRoleUserById = async (req: Request, res: Response) => {
+export const getRoleById = async (req: Request, res: Response) => {
     const {userId} = req.params
 
     try {
-        const roleIdUserFound = await getRoleIdUserByIdentification.getRoleUserById(BigInt(userId))
+        const roleIdUserFound = await getUserRoleById.getUserRoleById(BigInt(userId))
 
         res.status(200).json({
             status: 'OK',

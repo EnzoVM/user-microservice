@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import InsertRole from "../core/role/application/insert.role"
 import GetIdByRoleName from "../core/role/application/get.id.by.role.name"
-import RolePrismaRepository from "../core/role/infraestructure/role.prisma.repository"
 import GetRoleNameById from "../core/role/application/get.role.by.id"
+import RolePrismaRepository from "../core/role/infraestructure/role.prisma.repository"
 
 const insertRole = new InsertRole(new RolePrismaRepository)
 const getIdByRoleName = new GetIdByRoleName(new RolePrismaRepository)
@@ -12,7 +12,7 @@ export const createNewRole = async (req: Request, res: Response) => {
     const {roleName, roleDescription} = req.body
 
     try {
-        const newRoleAdded = await insertRole.insertNewRole(roleName, roleDescription)        
+        const newRoleAdded = await insertRole.createRole(roleName, roleDescription)        
         res.status(201).json({
             status: "OK",
             message: "The new role has been inserted successfully",

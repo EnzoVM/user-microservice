@@ -18,8 +18,8 @@ app.get('/', (request: Request, response: Response) =>{
 })
 
 app.use('/docs', swaggerUi.serve,swaggerUi.setup(swaggerSetup))
-app.use('/api/v1/user', userRoutes)
-app.use('/api/v1/role', roleRoutes)
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/roles', roleRoutes)
 
 const server = app.listen(app.get('PORT'), ()=>{
     console.log(`Server running on port ${app.get('PORT')}`);
