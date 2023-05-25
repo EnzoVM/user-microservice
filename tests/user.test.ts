@@ -44,7 +44,7 @@ describe('POST /createOwner', () => {
         expect(response.body.message).toStrictEqual("Unauthorized access. A valid token is required")
     })
 
-    test('When a token from another role is entered ', async () => {
+    test('When a token from another role is entered', async () => {
         const response = await api.post('/api/v1/users/createOwner').send({
             userName: "Luis",
             userLastname:"Gonzales",
@@ -59,7 +59,7 @@ describe('POST /createOwner', () => {
         expect(response.body.message).toStrictEqual("Access denied. Administrator role is required")
     })
 
-    test('When a token entered is not valid ', async () => {
+    test('When a token entered is not valid', async () => {
         const response = await api.post('/api/v1/users/createOwner').send({
             userName: "Luis",
             userLastname:"Gonzales",
