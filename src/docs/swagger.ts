@@ -7,7 +7,9 @@ responseCreateOwner,
 createEmployee, 
 responseCreateEmployee,
 loginUser,
-responseLoginUser} from "./users.docs";
+responseLoginUser,
+createClient,
+responseCreateClient} from "./users.docs";
 
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
@@ -37,6 +39,9 @@ const swaggerDefinition: OAS3Definition = {
         '/api/v1/users/createEmployee':{
             post: createEmployee
         },
+        '/api/v1/users/createClient':{
+            post: createClient
+        },
         '/api/v1/users/login':{
             post: loginUser
         }
@@ -49,6 +54,7 @@ const swaggerDefinition: OAS3Definition = {
         schemas:{
             responseCreateOwner,
             responseCreateEmployee,
+            responseCreateClient,
             responseLoginUser
         }   
     }

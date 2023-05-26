@@ -149,6 +149,74 @@ const createEmployee = {
     }
 }
 
+
+const createClient = {
+    tags: ['Users'],
+    summary: 'Insert a new client',
+    description: 'This endpoint is for insert a new client',
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        userName: {
+                            type: 'string',
+                            description: 'Name of a new client',
+                            require: true,
+                            example: 'Marcos cliente'
+                        },
+                        userLastname: {
+                            type: 'string',
+                            description: 'Lastname of a new client',
+                            require: true,
+                            example: 'Lopez'
+                        },
+                        userDNI: {
+                            type: 'number',
+                            description: 'DNI of a new client',
+                            require: true,
+                            example: 74346534
+                        },
+                        userPhoneNumber: {
+                            type: 'string',
+                            description: 'PhoneNumber of a new client',
+                            require: true,
+                            example: '+745345682345'
+                        },
+                        userEmail: {
+                            type: "string",
+                            description: 'Email of a new client',
+                            require: true,
+                            example: 'marcoscliente@gmail.com'
+                        },
+                        userPassword: {
+                            type: 'string',
+                            description: 'Password of a new client',
+                            require: true,
+                            example: '12345678'
+                        }
+                    }
+                }
+            }
+        }
+    },
+    responses: {
+        '201': {
+            description: 'Results of create a new client',
+            content: {
+                'application/json': {
+                    schema: {
+                        $ref: '#/components/schemas/responseCreateClient'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 const loginUser = {
     tags: ['Users'],
     summary: 'Login users',
@@ -273,6 +341,39 @@ const responseCreateEmployee = {
     }
 }
 
+const responseCreateClient = {
+    type: 'object',
+    properties: {
+        status: {
+            type: 'string',
+            description: 'State code of the response',
+            require: true,
+            example: 'OK'
+        },
+        message: {
+            type: 'string',
+            description: 'Message of the response',
+            require: true,
+            example: 'The new client has been inserted successfully'
+        },
+        data: {
+            type: 'object',
+            description: 'Data of the response',
+            require: true,
+            example: {
+                userId: "7076672780413187379",
+                userName: "Cliente prueba",
+                userLastname: "apellido cliente",
+                userDNI: 74563334,
+                userPhoneNumber: "+345678546789",
+                userEmail: "cliente@gmail.com",
+                userPassword: "$2b$10$MrmpYRHuMe1vfrxW9yAELe8.LqYIXUuq048DVbkVgoQKtdOqhFj4i",
+                roleId: "03278f3a-df09-4c37-b4d0-e875a5809a47"
+            }
+        }
+    }
+}
+
 const responseLoginUser = {
     type: 'object',
     properties: {
@@ -299,4 +400,4 @@ const responseLoginUser = {
 
 
 
-export {tokenForCreateOwner,tokenForCreateEmployee, createOwner, responseCreateOwner, createEmployee, responseCreateEmployee, loginUser, responseLoginUser}
+export {tokenForCreateOwner,tokenForCreateEmployee, createOwner, responseCreateOwner, createEmployee, responseCreateEmployee, loginUser, responseLoginUser, createClient, responseCreateClient}

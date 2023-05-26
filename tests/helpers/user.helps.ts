@@ -1,6 +1,6 @@
 
 //Array for data testing
-export const dataOwnerUserMissing = [
+export const dataUserMissing = [
     {
         //All the data is missing
     },
@@ -142,7 +142,7 @@ export const dataForLoginMissing = [
 
 
 //Array for validate testing
-export const dataOwnerUserValidate = [
+export const dataUserValidate = [
     {
         userName: "Luis",
         userLastname:"Gonzales",

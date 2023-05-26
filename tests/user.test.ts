@@ -1,8 +1,8 @@
 import index from '../src/index'
 import request from 'supertest'
 import {
-dataOwnerUserValidate, 
-dataOwnerUserMissing,
+dataUserValidate, 
+dataUserMissing,
 dataEmployeeUserMissing,
 dataEmployeeUserValidate,
 dataForLoginMissing} from './helpers/user.helps'
@@ -75,7 +75,7 @@ describe('POST /createOwner', () => {
     })
 
     test('When one field or all fields are missing', async () => {
-        for (const dataUser of dataOwnerUserMissing){
+        for (const dataUser of dataUserMissing){
             const response = await api.post('/api/v1/users/createOwner').send(dataUser)
                 .set('Authorization', `Bearer ${adminToken}`)
                 .expect('Content-Type', /application\/json/)
@@ -86,7 +86,7 @@ describe('POST /createOwner', () => {
     })
 
     test('When email/phoneNumber/DNI validate is wrong ', async () => {
-        for (const dataUser of dataOwnerUserValidate) {
+        for (const dataUser of dataUserValidate) {
             const response = await api.post('/api/v1/users/createOwner').send(dataUser)
                 .set('Authorization', `Bearer ${adminToken}`)
                 .expect('Content-Type', /application\/json/)
@@ -214,6 +214,58 @@ describe('POST /createEmployee', () => {
           .expect(201)
         
         expect(response.body.data.roleId).toStrictEqual("8f323445-48ea-4067-8a13-e8fa1f746e95")
+    })
+})
+
+
+describe('POST /createClient', () => {
+
+    test('should create a new client', async () => {
+        const response = await api.post('/api/v1/users/createClient').send({
+            userName: "cliente prueba",
+            userLastname:"clienteeeee",
+            userDNI: 74563334,
+            userPhoneNumber: "+345678546789",
+            userEmail:  "cliente@gmail.com",
+            userPassword: "1234567"
+        }).expect('Content-Type', /application\/json/)
+          .expect(201)
+        
+        expect(response.body.data.userName).toStrictEqual("cliente prueba")
+    })
+
+    test('When one field or all fields are missing', async () => {
+        for (const dataUser of dataUserMissing){
+            const response = await api.post('/api/v1/users/createClient').send(dataUser)
+                .expect('Content-Type', /application\/json/)
+                .expect(400)
+
+            expect(response.body.message).toStrictEqual("Data is missing")
+        }
+    })
+
+    test('When email/phoneNumber/DNI validate is wrong ', async () => {
+        for (const dataUser of dataUserValidate) {
+            const response = await api.post('/api/v1/users/createClient').send(dataUser)
+                .expect('Content-Type', /application\/json/)
+                .expect(400)
+                
+            expect(response.body.message).toStrictEqual("You have to specify the requested data")
+        } 
+    })
+
+    test('the users role must be client', async () => {
+        const response = await api.post('/api/v1/users/createClient').send({
+            userName: "cliente prueba",
+            userLastname:"clienteeeee",
+            userDNI: 74563334,
+            userPhoneNumber: "+345678546789",
+            userEmail:  "cliente@gmail.com",
+            userPassword: "1234567"
+        }).expect('Content-Type', /application\/json/)
+          .expect(201)
+        
+        expect(response.body.data.roleId).toStrictEqual("03278f3a-df09-4c37-b4d0-e875a5809a47")
     })
 })
 

@@ -17,7 +17,7 @@ export const createNewOwner = async (req: Request, res: Response) => {
         
         res.status(201).json({
             status: "OK",
-            message: "The new restaurant owner has been inserted successfully",
+            message: "The new owner has been inserted successfully",
             data: {
                 userId: newOwnerRestaurantAdded?.userId.toString(),
                 userName: newOwnerRestaurantAdded?.userName,
@@ -47,7 +47,7 @@ export const createNewEmployee = async (req: Request, res: Response) => {
         
         res.status(201).json({
             status: "OK",
-            message: "The new restaurant employee has been inserted successfully",
+            message: "The new employee has been inserted successfully",
             data: {
                 userId: newRestaurantEmployeeAdded?.userId.toString(),
                 userName: newRestaurantEmployeeAdded?.userName,
@@ -67,6 +67,37 @@ export const createNewEmployee = async (req: Request, res: Response) => {
         })
     }
 }
+
+
+export const createNewClient = async (req: Request, res: Response) => {
+    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
+
+    try {
+        const newClientAdded = await insertUser.createClient(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
+        
+        res.status(201).json({
+            status: "OK",
+            message: "The new client has been inserted successfully",
+            data: {
+                userId: newClientAdded?.userId.toString(),
+                userName: newClientAdded?.userName,
+                userLastname: newClientAdded?.userLastname,
+                userDNI: newClientAdded?.userDNI,
+                userPhoneNumber: newClientAdded?.userPhoneNumber,
+                userEmail: newClientAdded?.userEmail,
+                userPassword: newClientAdded?.userPassword,
+                roleId: newClientAdded?.roleId
+            }
+        })
+    } catch (error: any) {
+
+        res.status(400).json({
+            status: "Fail",
+            message: error.message,
+        })
+    }
+}
+
 
 export const getRoleById = async (req: Request, res: Response) => {
     const {userId} = req.params

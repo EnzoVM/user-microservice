@@ -33,9 +33,9 @@ export default class InsertUser {
             throw new Error('Owner role does not exist')
         }
 
-        const newOwnerRestaurant = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
-        const ownerRestaurantAdded = await this.userRepository.insertUser(newOwnerRestaurant)
-        return ownerRestaurantAdded
+        const newOwner = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
+        const ownerAdded = await this.userRepository.insertUser(newOwner)
+        return ownerAdded
     }
 
 
@@ -55,14 +55,37 @@ export default class InsertUser {
             throw new Error('Employee role does not exist')
         }
 
-        const newRestaurantEmployee = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
-        const restaurantEmployeeAdded = await this.userRepository.insertUser(newRestaurantEmployee)
+        const newEmployee = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
+        const employeeAdded = await this.userRepository.insertUser(newEmployee)
 
         //Insert an employee in a restaurant
-        const message = await this.userServiceRepository.addRestaurantEmployee(restaurantId, restaurantEmployeeAdded.userId.toString())
+        const message = await this.userServiceRepository.addRestaurantEmployee(restaurantId, employeeAdded.userId.toString())
         console.log(message);
         
-        return restaurantEmployeeAdded
+        return employeeAdded
+        
+    }
+
+    async createClient (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
+        
+        if(!userName || !userLastname || !userDNI || !userPhoneNumber || !userEmail || !userPassword){
+            throw new Error ('Data is missing')
+        }
+
+        const errorDataUser = await validate(new UserDTO(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword))
+        if (errorDataUser.length > 0) {
+            throw new Error ('You have to specify the requested data')
+        }
+        
+        const roleId = await getIdByRoleName.getIdByRoleName("Client")
+        if(roleId === null){
+            throw new Error('Client role does not exist')
+        }
+
+        const newClient = new User(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, roleId)
+        const clientAdded = await this.userRepository.insertUser(newClient)
+        
+        return clientAdded
         
     }
 }
