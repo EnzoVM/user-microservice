@@ -1,10 +1,10 @@
 import prisma from "../../../../connections/prisma.connection";
-import UserRepository from "../../domain/user.repository";
+import UserPersistanceRepository from "../../domain/user.persistance.repository";
 import User from "../../domain/user.model";
 
-export default class UserPrismaRepository implements UserRepository{
+export default class UserPrismaRepository implements UserPersistanceRepository{
     
-    async insertUser (user: User) {
+    async insertUser (user: User): Promise<User> {
         try {
             const userSaved = await prisma.user.create({
                 data: {
@@ -20,28 +20,13 @@ export default class UserPrismaRepository implements UserRepository{
             })
             
             return userSaved
+
         } catch (error:any) {
             throw new Error('ERROR IN INSERT USER')
         }
     }
-
-    async getUserById (userId: bigint) {
-        try {
-            const userFound = await prisma.user.findUnique({
-                where: {
-                    userId
-                }
-            })
     
-            if(!userFound) {return null}
-    
-            return userFound
-        } catch (error:any) {
-            throw new Error('ERROR IN GET USER BY ID')
-        }
-    }
-
-    async loginUser (userEmail: string) {
+    async getUserByEmail (userEmail: string): Promise<User | null> {
         try {
             const userFound = await prisma.user.findFirst({
                 where: {
@@ -50,6 +35,7 @@ export default class UserPrismaRepository implements UserRepository{
             })
     
             return userFound
+
         } catch (error:any) {
             throw new Error('ERROR IN LOGIN USER')
         }     

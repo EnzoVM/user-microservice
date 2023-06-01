@@ -246,7 +246,7 @@ const loginUser = {
         }
     },
     responses: {
-        '201': {
+        '200': {
             description: 'Results for login users',
             content: {
                 'application/json': {

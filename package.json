@@ -8,7 +8,8 @@
     "start": "tsc && node build/index.js",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint .",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --coverage tests/unit/*",
+    "test:integration": "jest --detectOpenHandles --coverage tests/integration/*"
   },
   "keywords": [],
   "author": "",

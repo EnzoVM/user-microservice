@@ -1,13 +1,15 @@
 import { Request, Response } from "express"
 import InsertUser from "../core/user/application/insert.user"
-import GetUserRoleById from "../core/user/application/get.user.role.by.id"
 import LoginUser from "../core/user/application/login.user"
+
 import UserPrismaRepository from "../core/user/infraestructure/prisma/user.prisma.repository"
 import RestaurantServiceRepository from "../core/user/infraestructure/services/restaurant.service.repository"
+import UserUuidRepository from "../core/user/infraestructure/uuid/user.uuid.repository"
+import UserBcryptRepository from "../core/user/infraestructure/bcrypt/user.bcrypt.repository"
+import RolePrismaRepository from "../core/role/infraestructure/prisma/role.prisma.repository"
 
-const insertUser = new InsertUser(new UserPrismaRepository, new RestaurantServiceRepository)
-const getUserRoleById = new GetUserRoleById(new UserPrismaRepository)
-const loginUser = new LoginUser(new UserPrismaRepository)
+const insertUser = new InsertUser(new UserPrismaRepository, new RestaurantServiceRepository, new UserUuidRepository, new UserBcryptRepository, new RolePrismaRepository)
+const loginUser = new LoginUser(new UserPrismaRepository, new UserBcryptRepository, new RolePrismaRepository)
 
 export const createNewOwner = async (req: Request, res: Response) => {
     const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
@@ -96,28 +98,6 @@ export const createNewClient = async (req: Request, res: Response) => {
             message: error.message,
         })
     }
-}
-
-
-export const getRoleById = async (req: Request, res: Response) => {
-    const {userId} = req.params
-
-    try {
-        const roleIdUserFound = await getUserRoleById.getUserRoleById(BigInt(userId))
-
-        res.status(200).json({
-            status: 'OK',
-            message: "The user's role name has been found",
-            data: roleIdUserFound
-        })
-    } catch (error: any) {
-        
-        res.status(400).json({
-            status: 'Fail',
-            message: error.message
-        })
-    }
-
 }
 
 export const login = async (req: Request, res: Response) => {

@@ -28,6 +28,7 @@ export const verifyUserRole = (userRole: String) => {
             }
             
             next()
+            
         } catch (error) {
             
             return res.status(401).json({

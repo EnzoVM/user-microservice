@@ -11,6 +11,15 @@ responseLoginUser,
 createClient,
 responseCreateClient} from "./users.docs";
 
+import {
+getRoleIdByRoleName, 
+responseGetRoleByUserId, 
+getRoleByUserId, 
+getRoleNameByRoleId, 
+createRole, 
+responseCreateRoles, 
+responseGetRoleIdByRoleName} from './role.docs'
+
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
     info: {
@@ -44,6 +53,18 @@ const swaggerDefinition: OAS3Definition = {
         },
         '/api/v1/users/login':{
             post: loginUser
+        },
+        '/api/v1/roles/{userId}':{
+            get: getRoleByUserId
+        },
+        '/api/v1/roles/id/{roleName}':{
+            get: getRoleIdByRoleName
+        },
+        '/api/v1/roles/name/{roleId}':{
+            get: getRoleNameByRoleId
+        },
+        '/api/v1/roles/insert':{
+            post: createRole
         }
     },
     components: {
@@ -55,7 +76,10 @@ const swaggerDefinition: OAS3Definition = {
             responseCreateOwner,
             responseCreateEmployee,
             responseCreateClient,
-            responseLoginUser
+            responseLoginUser,
+            responseGetRoleByUserId,
+            responseGetRoleIdByRoleName,
+            responseCreateRoles
         }   
     }
 }

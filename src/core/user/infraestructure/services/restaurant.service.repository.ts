@@ -7,7 +7,7 @@ export default class RestaurantServiceRepository implements UserServiceRepositor
     
     async addRestaurantEmployee (restaurantId: string, chefId: string) {
         try {
-            const response = await axios.post(`${serviceUrl}/api/v1/restaurants/createEmployeeRestaurant`, {
+            const response = await axios.post(`${serviceUrl}/api/v1/restaurantemployee/create`, {
                 restaurantId,
                 chefId
             })
@@ -17,9 +17,7 @@ export default class RestaurantServiceRepository implements UserServiceRepositor
             return message
     
         } catch (error:any) {
-            
-            return {status: 'Fail', message: 'ERROR EMPLOYEE TO RESTAURANT'}
-    
+            throw new Error(error.message)
         }
     }
 }
