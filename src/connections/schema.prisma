@@ -19,7 +19,7 @@ model User {
   userEmail       String  @db.VarChar(255)
   userPassword    String  @db.VarChar(255)
   roleId          String  
-  role            Role @relation(fields: [roleId], references: [roleId])
+  role            Role    @relation(fields: [roleId], references: [roleId])
 }
 
 model Role {

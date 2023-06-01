@@ -1,12 +1,11 @@
-import {v4 as uuid} from 'uuid'
 
 export default class Role {
     roleId: string
     roleName: string
     roleDescription: string
 
-    constructor(roleName: string, roleDescription: string){
-        this.roleId= uuid(),
+    constructor({roleId, roleName, roleDescription}:{roleId: string, roleName: string, roleDescription: string}){
+        this.roleId= roleId,
         this.roleName = roleName,
         this.roleDescription= roleDescription
     }

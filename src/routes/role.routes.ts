@@ -1,11 +1,12 @@
 import { Router } from "express"
-import { getRoleById ,getIdByName, createNewRole } from "../controllers/role.controller"
+import { getRoleNameById ,getRoleIdByName, createNewRole, getRoleByUserId } from "../controllers/role.controller"
 
 const roleRoutes = Router()
 
 roleRoutes
-    .get('/id/:roleName', getIdByName)
-    .get('/name/:roleId', getRoleById)
+    .get('/:userId', getRoleByUserId)
+    .get('/id/:roleName', getRoleIdByName)
+    .get('/name/:roleId', getRoleNameById)
     .post('/insert', createNewRole)
 
 export default roleRoutes

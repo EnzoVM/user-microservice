@@ -1,9 +1,13 @@
 import { Router } from "express"
-import { getRoleUserById ,createNewRestaurantOwner } from "../controllers/user.controller"
+import { createNewOwner, login, createNewEmployee, createNewClient } from "../controllers/user.controller"
+import { verifyUserRole } from "../middlewares/verify.user.role";
 
 const userRoutes = Router()
 
-userRoutes.get('/getRoleId/:userId', getRoleUserById)
-userRoutes.post('/createOwner', createNewRestaurantOwner)
+userRoutes
+    .post('/createOwner', verifyUserRole('Administrator'), createNewOwner)
+    .post('/createEmployee', verifyUserRole('Owner'), createNewEmployee)
+    .post('/createClient', createNewClient)
+    .post('/login', login)
 
 export default userRoutes

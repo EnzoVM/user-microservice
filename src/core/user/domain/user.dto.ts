@@ -4,36 +4,54 @@ IsNumber,
 IsString, 
 IsNumberString, 
 MaxLength, 
-Matches} from 'class-validator'
+Matches,
+IsNotEmpty} from 'class-validator'
 
 export default class UserDTO {
 
-    @IsString()
+    @IsNotEmpty({message: 'Name of user is empty', groups:['OwnerAndClientValidation']})
+    @IsString({message: 'Name must be a string', groups:['OwnerAndClientValidation']})
     userName: string
     
-    @IsString()
+    @IsNotEmpty({message: 'Lastname of user is empty', groups:['OwnerAndClientValidation']})
+    @IsString({message: 'Lastname must be a string', groups:['OwnerAndClientValidation']})
     userLastname: string
 
-    @IsNumber()
+    @IsNotEmpty({message: 'DNI of user is empty', groups:['OwnerAndClientValidation']})
+    @IsNumber({}, {message: 'DNI must be a number', groups:['OwnerAndClientValidation']})
     userDNI: number
 
-    @IsNumberString({}, {message: 'El valor ingresado debe de ser un numero'})
-    @MaxLength(13, {message: 'El número ingresado es muy largo, solo se permite 13 caracteres'})
-    @Matches(/^(\+)?\d+$/, {message: 'El valor debe de ser númerico y puede incluir el símbolo "+" al inicio'})
+    @IsNotEmpty({message: 'Phone number of user is empty', groups:['OwnerAndClientValidation']})
+    @IsNumberString({}, {message: 'Phone number must be a number', groups:['OwnerAndClientValidation']})
+    @MaxLength(13, {message: 'Phone number is very long, only 13 characters allowed', groups:['OwnerAndClientValidation']})
+    @Matches(/^(\+)?\d+$/, {message: 'Phone number must be numeric and may include the leading + symbol', groups:['OwnerAndClientValidation']})
     userPhoneNumber: string
 
-    @IsEmail({},{message: 'El email ingresado no es valido'})
+    @IsNotEmpty({message: 'Email of user is empty', groups:['OwnerAndClientValidation']})
+    @IsString({message: 'Email must be a string', groups:['OwnerAndClientValidation']})
+    @IsEmail({},{message: 'Email entered is not valid', groups:['OwnerAndClientValidation']})
+    @IsNotEmpty({message: 'Email of user is empty', groups:['loginValidation']})
+    @IsString({message: 'Email must be a string', groups:['loginValidation']})
+    @IsEmail({},{message: 'Email entered is not valid', groups:['loginValidation']})
     userEmail: string
 
-    @IsString()
+    @IsNotEmpty({message: 'Password of user is empty', groups:['OwnerAndClientValidation']})
+    @IsString({message: 'Password must be a string', groups:['OwnerAndClientValidation']})
+    @IsNotEmpty({message: 'Password of user is empty', groups:['loginValidation']})
+    @IsString({message: 'Password must be a string', groups:['loginValidation']})
     userPassword: string
 
-    constructor(userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
+    @IsNotEmpty({message: 'Restaurant id of employee is empty'})
+    @IsString({message: 'Restaurant id must be a string'})
+    restaurantId: string
+
+    constructor({userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId}:{userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, restaurantId: string}){
         this.userName = userName,
         this.userLastname = userLastname,
         this.userDNI = userDNI,
         this.userPhoneNumber = userPhoneNumber,
         this.userEmail = userEmail,
-        this.userPassword = userPassword
+        this.userPassword = userPassword,
+        this.restaurantId = restaurantId
     }
 }
