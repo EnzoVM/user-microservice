@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import express, {Request, Response} from 'express'
 import morgan from 'morgan'
 import userRoutes from './routes/user.routes'
