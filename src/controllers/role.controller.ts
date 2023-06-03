@@ -36,7 +36,7 @@ export const getRoleIdByName = async (req: Request, res: Response) => {
     try {
         const roleIdFound = await getRoleIdByRoleName.getRolId(roleName)
         
-        res.status(201).json({
+        res.status(200).json({
             status: "OK",
             message: "The role id has been found",
             data: roleIdFound
@@ -55,7 +55,7 @@ export const getRoleNameById = async (req: Request, res: Response) => {
 
     try {
         const roleNameFound = await getRoleNameByRoleId.getRoleName(roleId)
-        res.status(201).json({
+        res.status(200).json({
             status: "OK",
             message: "The role name has been found ",
             data: roleNameFound
