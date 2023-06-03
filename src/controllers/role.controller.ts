@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-
 import InsertRole from "../core/role/application/insert.role"
 import GetRoleIdByRoleName from "../core/role/application/get.role.id.by.role.name"
 import GetRoleNameByRoleId from "../core/role/application/get.role.name.by.role.id"
