@@ -1,11 +1,5 @@
 import index from '../../src/index'
 import request from 'supertest'
-import {
-dataUserValidate, 
-dataUserMissing,
-dataEmployeeUserMissing,
-dataEmployeeUserValidate,
-dataForLoginMissing} from './helpers/user.helps'
 
 const {app, server} = index
 const api = request(app)
