@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "tsc && node build/src/index.js",
     "dev": "ts-node-dev src/index.ts",
-    "test": "jest --detectOpenHandles --coverage tests/unit/*",
+    "test:unit": "jest --detectOpenHandles --coverage tests/unit/*",
     "test:integration": "jest --detectOpenHandles --coverage tests/integration/*"
   },
   "keywords": [],
