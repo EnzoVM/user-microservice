@@ -101,7 +101,9 @@ export default class InsertUser {
             const employeeAdded = await this.userPersistanceRepository.insertUser(newEmployee)
     
             //Insert an employee in a restaurant
-            await this.userServiceRepository.addRestaurantEmployee(restaurantId, employeeAdded.userId.toString())
+            const message = await this.userServiceRepository.addRestaurantEmployee(restaurantId, employeeAdded.userId.toString())
+            console.log(message);
+            
             return employeeAdded
 
         } catch (error: any) {
