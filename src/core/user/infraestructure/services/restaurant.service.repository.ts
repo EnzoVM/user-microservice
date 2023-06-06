@@ -1,7 +1,7 @@
 import axios from 'axios'
 import UserServiceRepository from '../../domain/user.service.repository'
 
-const serviceUrl = 'http://localhost:3001'
+const serviceUrl = process.env.NODE_ENV === 'dev' ?  'http://192.168.18.116:3001' : process.env.API_PLAZOLETA
 
 export default class RestaurantServiceRepository implements UserServiceRepository {
     
@@ -11,14 +11,11 @@ export default class RestaurantServiceRepository implements UserServiceRepositor
                 restaurantId,
                 chefId
             })
-    
-            const {status, message, data} = response.data
-    
-            return message
+            
+            return response.data.message
     
         } catch (error:any) {
             throw new Error(error.message)
         }
     }
 }
-    

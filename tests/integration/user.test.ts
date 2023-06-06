@@ -3,8 +3,10 @@ import request from 'supertest'
 
 const {app, server} = index
 const api = request(app)
-const adminToken = process.env.ADMIN_TOKEN
-const ownerToken = process.env.OWNER_TOKEN
+
+//test tokens
+const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4'
+const ownerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjgzNzUxMDEwMzAwNjMxMTIzIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NDgwODM4MH0.lmWBJTH9oet9uh0uBfwl4Fs-xseXDmbQT9Xk7J78jso'
 const tokenInvalid = 'ecnecnenne3jrn4rn4jrn4r'  //token de prueba
 
 describe('POST /createOwner', () => {
@@ -89,7 +91,7 @@ describe('POST /createEmployee', () => {
 
     test('should create a new employee', async () => {
         const response = await api.post('/api/v1/users/createEmployee').send({
-            userName: "Employee",
+            userName: "EmployeeNuevo",
             userLastname:"ejemplo",
             userDNI: 73456345,
             userPhoneNumber: "+345656346789",
@@ -100,7 +102,7 @@ describe('POST /createEmployee', () => {
           .expect('Content-Type', /application\/json/)
           .expect(201)
         
-        expect(response.body.data.userName).toStrictEqual("Employee")
+        expect(response.body.data.userName).toStrictEqual("EmployeeNuevo")
     })
 
     test('When there is not token', async () => {
