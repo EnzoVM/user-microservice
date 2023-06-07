@@ -7,12 +7,16 @@ import roleRoutes from './routes/role.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSetup from './docs/swagger'
 import prisma from './connections/prisma.connection'
+import cors from 'cors'
 
 const app = express()
 
 app.set('PORT', process.env.PORT || 3000)
 app.use(express.json())
 app.use(morgan('dev'))
+app.use(cors({
+    origin: '*'
+}))
 
 app.get('/', (request: Request, response: Response) =>{
     response.status(201).json({
