@@ -13,13 +13,26 @@ jest.mock("../../../../src/core/role/infraestructure/prisma/role.prisma.reposito
 
 describe('Insert User', () => {
 
-    test('Should create a owner successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
+    let userPrismaRepository
+    let restaurantServiceRepository
+    let userUuidRepository
+    let userBcryptRepository
+    let rolePrismaRepository
 
+    beforeEach(() => {
+        userPrismaRepository = new UserPrismaRepository()
+        restaurantServiceRepository = new RestaurantServiceRepository()
+        userUuidRepository = new UserUuidRepository()
+        userBcryptRepository = new UserBcryptRepository()
+        rolePrismaRepository = new RolePrismaRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    
+    test('Should create a owner successfully', async () => {
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -50,12 +63,6 @@ describe('Insert User', () => {
 
 
     test('Should create a client successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -86,12 +93,6 @@ describe('Insert User', () => {
 
 
     test('Should create an employee successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -122,12 +123,6 @@ describe('Insert User', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //Name and Email are missing
@@ -137,12 +132,6 @@ describe('Insert User', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //Name, Email and Restaurant id are missing
@@ -152,12 +141,6 @@ describe('Insert User', () => {
 
 
     test('When some or all parameters are incorrect', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //DNI must be a number and Email validate is incorrect
@@ -167,12 +150,6 @@ describe('Insert User', () => {
 
 
     test('when there is an error in the generation of the user id', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -205,12 +182,6 @@ describe('Insert User', () => {
 
 
     test('when there is an error in the encryption of the password', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -241,12 +212,6 @@ describe('Insert User', () => {
 
 
     test('when there is the role of the owner does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -277,12 +242,6 @@ describe('Insert User', () => {
 
 
     test('when there is the role of the client does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -313,12 +272,6 @@ describe('Insert User', () => {
 
 
     test('When there is an error in obtaining the user role', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -349,12 +302,6 @@ describe('Insert User', () => {
 
 
     test('When there is an error when saving user data', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -375,12 +322,6 @@ describe('Insert User', () => {
 
 
     test('When there is an error with the restaurant service', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -411,12 +352,6 @@ describe('Insert User', () => {
 
 
     test('when the role of the employee does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')

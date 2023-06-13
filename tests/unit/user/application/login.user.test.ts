@@ -1,5 +1,5 @@
 import LoginUser from "../../../../src/core/user/application/login.user"
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken"
 import UserPrismaRepository from "../../../../src/core/user/infraestructure/prisma/user.prisma.repository"
 import UserBcryptRepository from "../../../../src/core/user/infraestructure/bcrypt/user.bcrypt.repository"
 import RolePrismaRepository from "../../../../src/core/role/infraestructure/prisma/role.prisma.repository"
@@ -10,12 +10,23 @@ jest.mock("../../../../src/core/user/infraestructure/bcrypt/user.bcrypt.reposito
 jest.mock("../../../../src/core/role/infraestructure/prisma/role.prisma.repository")
 
 describe('Login user', () => {
+
+    let userPrismaRepository
+    let userBcryptRepository
+    let rolePrismaRepository
+
+    beforeEach(() => {
+        userPrismaRepository = new UserPrismaRepository()
+        userBcryptRepository = new UserBcryptRepository()
+        rolePrismaRepository = new RolePrismaRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
     
     test('User should login successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
@@ -43,10 +54,6 @@ describe('Login user', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const loginUser = new LoginUser(userPrismaRepository, userBcryptRepository, rolePrismaRepository)
         
         //Email is missing
@@ -56,10 +63,6 @@ describe('Login user', () => {
 
 
     test('When some or all parameters are incorrect', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const loginUser = new LoginUser(userPrismaRepository, userBcryptRepository, rolePrismaRepository)
         
         //Email validate is wrong and Password must be a string
@@ -69,10 +72,6 @@ describe('Login user', () => {
 
 
     test('When user email has not been found', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
@@ -90,10 +89,6 @@ describe('Login user', () => {
 
 
     test('When there is an error when getting the user', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
@@ -111,10 +106,6 @@ describe('Login user', () => {
 
 
     test('When user password does not coincide', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
@@ -142,10 +133,6 @@ describe('Login user', () => {
 
 
     test('when there is an error with the password decryption', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
@@ -173,10 +160,6 @@ describe('Login user', () => {
 
     
     test('When user role has not been found', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyLogin = jest.spyOn(userPrismaRepository, 'getUserByEmail')
         const spyPasswordEncrypted = jest.spyOn(userBcryptRepository, 'decryptUserPassword')
         const spyUserRole = jest.spyOn(rolePrismaRepository, 'getRoleNameByRoleId')
