@@ -17,7 +17,7 @@ export default class RolePrismaRepository implements RolePersistanceRepository{
             return roleSaved
 
         } catch (error:any) {
-            throw new Error('ERROR IN INSERT ROLE')
+            throw new Error('ERROR IN INSERT ROLE: '+ error.message)
         }
     }
     
@@ -37,7 +37,7 @@ export default class RolePrismaRepository implements RolePersistanceRepository{
             return roleIdFound.roleId
             
         } catch (error:any) {
-            throw new Error('ERROR IN GET ID BY ROLE NAME')
+            throw new Error('ERROR IN GET ID BY ROLE NAME: '+ error.message)
         }
     }
 
@@ -57,7 +57,7 @@ export default class RolePrismaRepository implements RolePersistanceRepository{
             return roleNameFound.roleName
 
         } catch (error:any) {
-            throw new Error('ERROR IN GET ROLE NAME BY ID')
+            throw new Error('ERROR IN GET ROLE NAME BY ID: '+ error.message)
         }
     }
 
@@ -76,7 +76,7 @@ export default class RolePrismaRepository implements RolePersistanceRepository{
             return roleNameFound
 
         } catch (error:any) {
-            throw new Error('ERROR IN GET ROLE NAME BY ID')
+            throw new Error('ERROR IN GET ROLE NAME BY ID: '+ error.message)
         }
     }
 }
