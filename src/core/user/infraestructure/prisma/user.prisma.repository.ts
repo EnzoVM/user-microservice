@@ -22,7 +22,7 @@ export default class UserPrismaRepository implements UserPersistanceRepository{
             return userSaved
 
         } catch (error:any) {
-            throw new Error('ERROR IN INSERT USER')
+            throw new Error('ERROR IN INSERT USER: '+ error.message)
         }
     }
     
@@ -37,7 +37,7 @@ export default class UserPrismaRepository implements UserPersistanceRepository{
             return userFound
 
         } catch (error:any) {
-            throw new Error('ERROR IN LOGIN USER')
+            throw new Error('ERROR IN LOGIN USER: '+ error.message)
         }     
     }
 }
