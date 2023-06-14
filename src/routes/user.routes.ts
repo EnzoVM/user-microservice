@@ -1,13 +1,13 @@
 import { Router } from "express"
-import { createNewOwner, login, createNewEmployee, createNewClient } from "../controllers/user.controller"
+import { login, createNewEmployee, createNewOwnerOrClient } from "../controllers/user.controller"
 import { verifyUserRole } from "../middlewares/verify.user.role";
 
 const userRoutes = Router()
 
 userRoutes
-    .post('/createOwner', verifyUserRole('Administrator'), createNewOwner)
+    .post('/createOwner', verifyUserRole('Administrator'), createNewOwnerOrClient('Owner'))
     .post('/createEmployee', verifyUserRole('Owner'), createNewEmployee)
-    .post('/createClient', createNewClient)
+    .post('/createClient', createNewOwnerOrClient('Client'))
     .post('/login', login)
 
 export default userRoutes

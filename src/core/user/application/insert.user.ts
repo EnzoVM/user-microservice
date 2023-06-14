@@ -1,6 +1,6 @@
 import User from "../domain/user.model"
 import UserDTO from "../domain/user.dto"
-import { validate } from "class-validator"
+import { validate, ValidationError } from "class-validator"
 
 import UserPersistanceRepository from "../domain/user.persistance.repository"
 import UserServiceRepository from "../domain/user.service.repository"
@@ -23,7 +23,7 @@ export default class InsertUser {
         this.rolePersistanceRepository = rolePersistanceRepository
     }
 
-    async createOwner (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
+    async createOwnerOrClient (userRole: string, userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
         try {
             //@ts-ignore
             const errorDataUser = await validate(new UserDTO({
@@ -33,7 +33,7 @@ export default class InsertUser {
                 userPhoneNumber, 
                 userEmail, 
                 userPassword
-            }), {groups: ['OwnerAndClientValidation']})       
+            }), {groups: ['OwnerAndClientValidation']})      
             if (errorDataUser.length > 0) {
                 const errorMessages = errorDataUser.map((error) => error.constraints ? Object.values(error.constraints): []).flat()
                 throw new Error(errorMessages.join(', '))
@@ -41,12 +41,12 @@ export default class InsertUser {
             
             const userId = this.userIdGeneratorRepository.generateUserId()
             const userPasswordEncrypted = await this.userPasswordGeneratorRepository.generateUserPassword(userPassword)
-            const roleId = await this.rolePersistanceRepository.getRoleIdByRoleName('Owner')
+            const roleId = await this.rolePersistanceRepository.getRoleIdByRoleName(userRole)
             if(!roleId){
-                throw new Error('Owner role does not exist')
+                throw new Error(`${userRole} role does not exist`)
             }
 
-            const newOwner = new User({
+            const newUser = new User({
                 userId: userId,
                 userName: userName, 
                 userLastname: userLastname, 
@@ -56,14 +56,13 @@ export default class InsertUser {
                 userPassword: userPasswordEncrypted,
                 roleId: roleId
             })
-            const ownerAdded = await this.userPersistanceRepository.insertUser(newOwner)          
-            return ownerAdded
+            const userAdded = await this.userPersistanceRepository.insertUser(newUser)          
+            return userAdded
 
         } catch (error: any) {
             throw new Error(error.message)
         }
     }
-
 
     async createEmployee (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, restaurantId: string){
         try {
@@ -105,48 +104,6 @@ export default class InsertUser {
             console.log(message);
             
             return employeeAdded
-
-        } catch (error: any) {
-            throw new Error(error.message)
-        }
-    }
-
-
-    async createClient (userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string){
-        try {
-            //@ts-ignore
-            const errorDataUser = await validate(new UserDTO({
-                userName, 
-                userLastname, 
-                userDNI, 
-                userPhoneNumber, 
-                userEmail, 
-                userPassword
-            }), {groups: ['OwnerAndClientValidation']})      
-            if (errorDataUser.length > 0) {
-                const errorMessages = errorDataUser.map((error) => error.constraints ? Object.values(error.constraints): []).flat()
-                throw new Error(errorMessages.join(', '))
-            }
-                    
-            const userId = this.userIdGeneratorRepository.generateUserId()
-            const userPasswordEncrypted = await this.userPasswordGeneratorRepository.generateUserPassword(userPassword)
-            const roleId = await this.rolePersistanceRepository.getRoleIdByRoleName('Client')
-            if(!roleId){
-                throw new Error('Client role does not exist')
-            }
-            
-            const newClient = new User({
-                userId: userId,
-                userName: userName, 
-                userLastname: userLastname, 
-                userDNI: userDNI, 
-                userPhoneNumber: userPhoneNumber, 
-                userEmail: userEmail, 
-                userPassword: userPasswordEncrypted,
-                roleId: roleId
-            })
-            const clientAdded = await this.userPersistanceRepository.insertUser(newClient)
-            return clientAdded
 
         } catch (error: any) {
             throw new Error(error.message)

@@ -56,7 +56,7 @@ describe('Insert User', () => {
         spyRestaurantService.mockResolvedValue('Data is registered')
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
-        const userSaved = await insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')
+        const userSaved = await insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')
 
         expect(userSaved.userName).toStrictEqual('OwnerMock')
     })
@@ -86,7 +86,7 @@ describe('Insert User', () => {
         spyRestaurantService.mockResolvedValue('Data is registered')
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
-        const userSaved = await insertUser.createClient('ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')
+        const userSaved = await insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')
 
         expect(userSaved.userName).toStrictEqual('ClientMock')
     })
@@ -127,7 +127,7 @@ describe('Insert User', () => {
         
         //Name and Email are missing
         //@ts-ignore
-        await expect(insertUser.createOwner('lastname mock', 74563334, '+345678546789', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'lastname mock', 74563334, '+345678546789', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -145,7 +145,7 @@ describe('Insert User', () => {
         
         //DNI must be a number and Email validate is incorrect
         //@ts-ignore
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', "74563334", '+345678546789', 'ownerpruebamocgmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', "74563334", '+345678546789', 'ownerpruebamocgmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -177,7 +177,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -207,7 +207,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -237,7 +237,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -267,7 +267,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -297,7 +297,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
@@ -317,7 +317,7 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
