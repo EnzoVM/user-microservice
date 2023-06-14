@@ -5,6 +5,17 @@ jest.mock("axios")
 
 describe('Restaurant Service / add restaurant employee', () => {
 
+    let restaurantServiceRepository
+
+    beforeEach(() => {
+        restaurantServiceRepository = new RestaurantServiceRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    
     test('Should insert an employee into a restaurant', async () => {
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue({
             data: {
@@ -18,7 +29,6 @@ describe('Restaurant Service / add restaurant employee', () => {
             }
         })
 
-        const restaurantServiceRepository = new RestaurantServiceRepository()
         const response = await restaurantServiceRepository.addRestaurantEmployee('08f71c12-407f-44fa', '7004894246724579938')
 
         expect((axios as jest.Mocked<typeof axios>).post).toHaveBeenCalled()
@@ -28,8 +38,6 @@ describe('Restaurant Service / add restaurant employee', () => {
 
     test('When there is an error with axios', async () => {
         (axios as jest.Mocked<typeof axios>).post.mockRejectedValue(new Error('ERROR IN ADD EMPLOYEE INTO RESTAURANT'))
-
-        const restaurantServiceRepository = new RestaurantServiceRepository()
 
         await expect(restaurantServiceRepository.addRestaurantEmployee('08f71c12-407f-44fa', '7004894246724579938')).rejects.toBeInstanceOf(Error)
     })

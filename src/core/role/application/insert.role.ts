@@ -10,7 +10,7 @@ export default class InsertRole {
     private readonly roleIdGeneratorRepository: RoleIdGeneratorRepository
 
     constructor(rolePersistanceRepository: RolePersistanceRepository, roleIdGeneratorRepository: RoleIdGeneratorRepository){
-        this.rolePersistanceRepository = rolePersistanceRepository,
+        this.rolePersistanceRepository = rolePersistanceRepository
         this.roleIdGeneratorRepository = roleIdGeneratorRepository
     }
     

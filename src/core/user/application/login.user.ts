@@ -12,8 +12,8 @@ export default class LoginUser {
     private readonly rolePersistanceRepository: RolePersistanceRepository
 
     constructor(userPersistanceRepository: UserPersistanceRepository, userPasswordGeneratorRepository: UserPasswordGeneratorRepository, rolePersistanceRepository: RolePersistanceRepository) {
-        this.userPersistanceRepository = userPersistanceRepository,
-        this.userPasswordGeneratorRepository = userPasswordGeneratorRepository,
+        this.userPersistanceRepository = userPersistanceRepository
+        this.userPasswordGeneratorRepository = userPasswordGeneratorRepository
         this.rolePersistanceRepository = rolePersistanceRepository
     }
 

@@ -11,88 +11,59 @@ import RolePrismaRepository from "../core/role/infraestructure/prisma/role.prism
 const insertUser = new InsertUser(new UserPrismaRepository, new RestaurantServiceRepository, new UserUuidRepository, new UserBcryptRepository, new RolePrismaRepository)
 const loginUser = new LoginUser(new UserPrismaRepository, new UserBcryptRepository, new RolePrismaRepository)
 
-export const createNewOwner = async (req: Request, res: Response) => {
-    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
+export const createNewOwnerOrClient = (userRole: string) => {
+    return async (req: Request, res: Response) => {
+        const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
 
-    try {
-        const newOwnerRestaurantAdded = await insertUser.createOwner(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
-        
-        res.status(201).json({
-            status: "OK",
-            message: "The new owner has been inserted successfully",
-            data: {
-                userId: newOwnerRestaurantAdded?.userId.toString(),
-                userName: newOwnerRestaurantAdded?.userName,
-                userLastname: newOwnerRestaurantAdded?.userLastname,
-                userDNI: newOwnerRestaurantAdded?.userDNI,
-                userPhoneNumber: newOwnerRestaurantAdded?.userPhoneNumber,
-                userEmail: newOwnerRestaurantAdded?.userEmail,
-                userPassword: newOwnerRestaurantAdded?.userPassword,
-                roleId: newOwnerRestaurantAdded?.roleId
-            }
-        })
-    } catch (error: any) {
+        try {
+            const newUserAdded = await insertUser.createOwnerOrClient(userRole, userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
+            
+            res.status(201).json({
+                status: "OK",
+                message: `The new ${userRole} has been inserted successfully`,
+                data: {
+                    userId: newUserAdded?.userId.toString(),
+                    userName: newUserAdded?.userName,
+                    userLastname: newUserAdded?.userLastname,
+                    userDNI: newUserAdded?.userDNI,
+                    userPhoneNumber: newUserAdded?.userPhoneNumber,
+                    userEmail: newUserAdded?.userEmail,
+                    userPassword: newUserAdded?.userPassword,
+                    roleId: newUserAdded?.roleId
+                }
+            })
 
-        res.status(400).json({
-            status: "Fail",
-            message: error.message,
-        })
+        } catch (error: any) {
+            res.status(400).json({
+                status: "Fail",
+                message: error.message,
+            })
+        }
     }
 }
-
 
 export const createNewEmployee = async (req: Request, res: Response) => {
     const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId} = req.body
 
     try {
-        const newRestaurantEmployeeAdded = await insertUser.createEmployee(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId)
+        const newEmployeeAdded = await insertUser.createEmployee(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId)
         
         res.status(201).json({
             status: "OK",
             message: "The new employee has been inserted successfully",
             data: {
-                userId: newRestaurantEmployeeAdded?.userId.toString(),
-                userName: newRestaurantEmployeeAdded?.userName,
-                userLastname: newRestaurantEmployeeAdded?.userLastname,
-                userDNI: newRestaurantEmployeeAdded?.userDNI,
-                userPhoneNumber: newRestaurantEmployeeAdded?.userPhoneNumber,
-                userEmail: newRestaurantEmployeeAdded?.userEmail,
-                userPassword: newRestaurantEmployeeAdded?.userPassword,
-                roleId: newRestaurantEmployeeAdded?.roleId
+                userId: newEmployeeAdded?.userId.toString(),
+                userName: newEmployeeAdded?.userName,
+                userLastname: newEmployeeAdded?.userLastname,
+                userDNI: newEmployeeAdded?.userDNI,
+                userPhoneNumber: newEmployeeAdded?.userPhoneNumber,
+                userEmail: newEmployeeAdded?.userEmail,
+                userPassword: newEmployeeAdded?.userPassword,
+                roleId: newEmployeeAdded?.roleId
             }
         })
     } catch (error: any) {
         
-        res.status(400).json({
-            status: "Fail",
-            message: error.message,
-        })
-    }
-}
-
-
-export const createNewClient = async (req: Request, res: Response) => {
-    const {userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword} = req.body
-
-    try {
-        const newClientAdded = await insertUser.createClient(userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword)
-        
-        res.status(201).json({
-            status: "OK",
-            message: "The new client has been inserted successfully",
-            data: {
-                userId: newClientAdded?.userId.toString(),
-                userName: newClientAdded?.userName,
-                userLastname: newClientAdded?.userLastname,
-                userDNI: newClientAdded?.userDNI,
-                userPhoneNumber: newClientAdded?.userPhoneNumber,
-                userEmail: newClientAdded?.userEmail,
-                userPassword: newClientAdded?.userPassword,
-                roleId: newClientAdded?.roleId
-            }
-        })
-    } catch (error: any) {
-
         res.status(400).json({
             status: "Fail",
             message: error.message,

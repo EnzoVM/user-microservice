@@ -5,8 +5,8 @@ export default class Role {
     roleDescription: string
 
     constructor({roleId, roleName, roleDescription}:{roleId: string, roleName: string, roleDescription: string}){
-        this.roleId= roleId,
-        this.roleName = roleName,
+        this.roleId= roleId
+        this.roleName = roleName
         this.roleDescription= roleDescription
     }
 }
