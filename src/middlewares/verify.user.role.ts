@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
-export const verifyUserRole = (userRole: String) => {
+export const verifyUserRole = (userRole: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
 
         const tokenFound = req.header('Authorization')?.replace('Bearer ', '')

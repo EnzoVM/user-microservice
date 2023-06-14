@@ -1,6 +1,6 @@
 import User from "../domain/user.model"
 import UserDTO from "../domain/user.dto"
-import { validate, ValidationError } from "class-validator"
+import { validate } from "class-validator"
 
 import UserPersistanceRepository from "../domain/user.persistance.repository"
 import UserServiceRepository from "../domain/user.service.repository"
@@ -16,10 +16,10 @@ export default class InsertUser {
     private readonly rolePersistanceRepository: RolePersistanceRepository
     
     constructor(userPersistanceRepository: UserPersistanceRepository, userServiceRepository: UserServiceRepository, userIdGeneratorRepository: UserIdGeneratorRepository, userPasswordGeneratorRepository: UserPasswordGeneratorRepository, rolePersistanceRepository: RolePersistanceRepository){
-        this.userPersistanceRepository = userPersistanceRepository,
-        this.userServiceRepository = userServiceRepository,
-        this.userIdGeneratorRepository = userIdGeneratorRepository,
-        this.userPasswordGeneratorRepository = userPasswordGeneratorRepository,
+        this.userPersistanceRepository = userPersistanceRepository
+        this.userServiceRepository = userServiceRepository
+        this.userIdGeneratorRepository = userIdGeneratorRepository
+        this.userPasswordGeneratorRepository = userPasswordGeneratorRepository
         this.rolePersistanceRepository = rolePersistanceRepository
     }
 

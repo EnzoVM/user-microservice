@@ -13,7 +13,7 @@ export default class RoleDTO {
     roleDescription: string
 
     constructor({roleName, roleDescription}:{roleName: string, roleDescription: string}){
-        this.roleName = roleName,
+        this.roleName = roleName
         this.roleDescription = roleDescription
     }
 }
