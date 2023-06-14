@@ -5,10 +5,19 @@ jest.mock("../../../../src/core/role/infraestructure/prisma/role.prisma.reposito
 
 describe('Get Role ID by role name', () => {
 
-    test('Get Role ID successfully', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const spyRole = jest.spyOn(rolePrismaRepository, 'getRoleIdByRoleName')
+    let rolePrismaRepository
 
+    beforeEach(() => {
+        rolePrismaRepository = new RolePrismaRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('Get Role ID successfully', async () => {
+        const spyRole = jest.spyOn(rolePrismaRepository, 'getRoleIdByRoleName')
         spyRole.mockResolvedValue('344f4fmrimf4mf-4gj4gi4g4-g4g4g4g4')
 
         const getRoleIdByRoleName = new GetRoleIdByRoleName(rolePrismaRepository)
@@ -19,9 +28,7 @@ describe('Get Role ID by role name', () => {
 
 
     test('When role id not found', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
         const spyRole = jest.spyOn(rolePrismaRepository, 'getRoleIdByRoleName')
-
         spyRole.mockResolvedValue(null)
 
         const getRoleIdByRoleName = new GetRoleIdByRoleName(rolePrismaRepository)
@@ -30,9 +37,7 @@ describe('Get Role ID by role name', () => {
     })
 
     test('When there is an error with get rol id', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
         const spyRole = jest.spyOn(rolePrismaRepository, 'getRoleIdByRoleName')
-
         spyRole.mockRejectedValue(new Error("ERROR IN GET ROLE ID"))
 
         const getRoleIdByRoleName = new GetRoleIdByRoleName(rolePrismaRepository)

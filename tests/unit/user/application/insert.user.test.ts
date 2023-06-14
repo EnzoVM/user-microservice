@@ -13,13 +13,26 @@ jest.mock("../../../../src/core/role/infraestructure/prisma/role.prisma.reposito
 
 describe('Insert User', () => {
 
-    test('Should create a owner successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
+    let userPrismaRepository
+    let restaurantServiceRepository
+    let userUuidRepository
+    let userBcryptRepository
+    let rolePrismaRepository
 
+    beforeEach(() => {
+        userPrismaRepository = new UserPrismaRepository()
+        restaurantServiceRepository = new RestaurantServiceRepository()
+        userUuidRepository = new UserUuidRepository()
+        userBcryptRepository = new UserBcryptRepository()
+        rolePrismaRepository = new RolePrismaRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    
+    test('Should create a owner successfully', async () => {
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -43,19 +56,13 @@ describe('Insert User', () => {
         spyRestaurantService.mockResolvedValue('Data is registered')
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
-        const userSaved = await insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')
+        const userSaved = await insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')
 
         expect(userSaved.userName).toStrictEqual('OwnerMock')
     })
 
 
     test('Should create a client successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -79,19 +86,13 @@ describe('Insert User', () => {
         spyRestaurantService.mockResolvedValue('Data is registered')
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
-        const userSaved = await insertUser.createClient('ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')
+        const userSaved = await insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')
 
         expect(userSaved.userName).toStrictEqual('ClientMock')
     })
 
 
     test('Should create an employee successfully', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -122,27 +123,15 @@ describe('Insert User', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //Name and Email are missing
         //@ts-ignore
-        await expect(insertUser.createOwner('lastname mock', 74563334, '+345678546789', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'lastname mock', 74563334, '+345678546789', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When some or all parameters are missing', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //Name, Email and Restaurant id are missing
@@ -152,27 +141,15 @@ describe('Insert User', () => {
 
 
     test('When some or all parameters are incorrect', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
         
         //DNI must be a number and Email validate is incorrect
         //@ts-ignore
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', "74563334", '+345678546789', 'ownerpruebamocgmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', "74563334", '+345678546789', 'ownerpruebamocgmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('when there is an error in the generation of the user id', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -200,17 +177,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('when there is an error in the encryption of the password', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -236,17 +207,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('when there is the role of the owner does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -272,17 +237,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createOwner('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Owner', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('when there is the role of the client does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -308,17 +267,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'ClientMock', 'lastname mock', 74563334, '+345678546789', 'clientpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error in obtaining the user role', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -344,17 +297,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error when saving user data', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -370,17 +317,11 @@ describe('Insert User', () => {
 
         const insertUser = new InsertUser(userPrismaRepository, restaurantServiceRepository, userUuidRepository, userBcryptRepository, rolePrismaRepository)
 
-        await expect(insertUser.createClient('OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
+        await expect(insertUser.createOwnerOrClient('Client', 'OwnerMock', 'lastname mock', 74563334, '+345678546789', 'ownerpruebamock@gmail.com', '123456789')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error with the restaurant service', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')
@@ -411,12 +352,6 @@ describe('Insert User', () => {
 
 
     test('when the role of the employee does not exist', async () => {
-        const userPrismaRepository = new UserPrismaRepository()
-        const restaurantServiceRepository = new RestaurantServiceRepository()
-        const userUuidRepository = new UserUuidRepository()
-        const userBcryptRepository = new UserBcryptRepository()
-        const rolePrismaRepository = new RolePrismaRepository()
-
         const spyCreateUser = jest.spyOn(userPrismaRepository, 'insertUser')
         const spyRestaurantService = jest.spyOn(restaurantServiceRepository, 'addRestaurantEmployee')
         const spyUserId = jest.spyOn(userUuidRepository, 'generateUserId')

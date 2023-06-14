@@ -7,10 +7,20 @@ jest.mock("../../../../src/core/role/infraestructure/uuid/role.uuid.repository")
 
 describe('Insert new role', () => {
 
-    test('Insert role successfully', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const roleUuidRepository = new RoleUuidRepository()
+    let rolePrismaRepository
+    let roleUuidRepository
 
+    beforeEach(() => {
+        rolePrismaRepository = new RolePrismaRepository()
+        roleUuidRepository = new RoleUuidRepository()
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('Insert role successfully', async () => {
         const spyRole = jest.spyOn(rolePrismaRepository, 'insertRole')
         const spyRoleId = jest.spyOn(roleUuidRepository, 'generateRoleId')
 
@@ -30,9 +40,6 @@ describe('Insert new role', () => {
 
 
     test('When role name is missing', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const roleUuidRepository = new RoleUuidRepository()
-
         const insertRole = new InsertRole(rolePrismaRepository, roleUuidRepository)
 
         //Rola name is missing
@@ -42,9 +49,6 @@ describe('Insert new role', () => {
 
 
     test('When role description is missing', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const roleUuidRepository = new RoleUuidRepository()
-
         const insertRole = new InsertRole(rolePrismaRepository, roleUuidRepository)
 
         //Rola description is missing
@@ -54,9 +58,6 @@ describe('Insert new role', () => {
 
 
     test('when there is an error with generate ID', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const roleUuidRepository = new RoleUuidRepository()
-
         const spyRole = jest.spyOn(rolePrismaRepository, 'insertRole')
         const spyRoleId = jest.spyOn(roleUuidRepository, 'generateRoleId')
 
@@ -77,9 +78,6 @@ describe('Insert new role', () => {
     
 
     test('when there is an error with save role', async () => {
-        const rolePrismaRepository = new RolePrismaRepository()
-        const roleUuidRepository = new RoleUuidRepository()
-
         const spyRole = jest.spyOn(rolePrismaRepository, 'insertRole')
         const spyRoleId = jest.spyOn(roleUuidRepository, 'generateRoleId')
 

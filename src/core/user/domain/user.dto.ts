@@ -46,12 +46,12 @@ export default class UserDTO {
     restaurantId: string
 
     constructor({userName, userLastname, userDNI, userPhoneNumber, userEmail, userPassword, restaurantId}:{userName: string, userLastname: string, userDNI: number, userPhoneNumber: string, userEmail: string, userPassword: string, restaurantId: string}){
-        this.userName = userName,
-        this.userLastname = userLastname,
-        this.userDNI = userDNI,
-        this.userPhoneNumber = userPhoneNumber,
-        this.userEmail = userEmail,
-        this.userPassword = userPassword,
+        this.userName = userName
+        this.userLastname = userLastname
+        this.userDNI = userDNI
+        this.userPhoneNumber = userPhoneNumber
+        this.userEmail = userEmail
+        this.userPassword = userPassword
         this.restaurantId = restaurantId
     }
 }

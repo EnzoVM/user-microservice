@@ -5,6 +5,10 @@ export default class UserBcryptRepository implements UserPasswordGeneratorReposi
     
     async generateUserPassword (userPassword: string): Promise<string> {
         try {
+            if(typeof userPassword !== 'string'){
+                throw new Error('THE PASSWORD MUST BE A STRING')
+                
+            }
             
             const userPasswordEncrypted = await bcrypt.hash(userPassword, 10)
             return userPasswordEncrypted
