@@ -19,7 +19,7 @@ app.use(cors())
 
 app.get('/', (request: Request, response: Response) =>{
     response.status(201).json({
-        message: 'User Microservice funcionaaaa'
+        message: 'User Microservice funcionaaaa 2'
     }).end()
 })
 
