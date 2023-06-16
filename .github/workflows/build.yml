@@ -43,7 +43,7 @@ jobs:
       - name: Tag Docker Image
         run: docker tag user-microservice:latest public.ecr.aws/j1n4i3d3/enzovm/user-microservice:latest
       - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1n4i3d3
       - name: Upload docker image to ECR
         run: docker push public.ecr.aws/j1n4i3d3/enzovm/user-microservice:latest
   elastic-beanstalk:
