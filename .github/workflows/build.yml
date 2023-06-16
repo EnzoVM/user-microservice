@@ -1,10 +1,8 @@
 name: Build
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
+      - develop
       - main
     types: [opened, synchronize, reopened]
 
@@ -21,6 +19,7 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && (github.base_ref == 'develop' || github.base_ref == 'main') }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -39,6 +38,7 @@ jobs:
     name: Build Docker Image and Push to ECR
     runs-on: ubuntu-latest
     needs: sonarcloud
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -62,13 +62,14 @@ jobs:
     name: Rebuild Elastic Beanstalk
     runs-on: ubuntu-latest
     needs: docker-image-ECR
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 
-      - name: Generate deployment package
-        run: zip -r deploy.zip ./Dockerrun.aws.json
+      #- name: Generate deployment package                  # Only use if a new version is required
+      #  run: zip -r deploy.zip ./Dockerrun.aws.json        # Only use if a new version is required 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -78,6 +79,6 @@ jobs:
           environment_name: ${{ env.AWS_ENVIROMENT_NAME }}
           version_label: ${{ env.AWS_VERSION_LABEL }}
           region: ${{ env.AWS_REGION }}
-          deployment_package: deploy.zip
+      #    deployment_package: deploy.zip                    # Only use if a new version is required
           use_existing_version_if_available: true
 
