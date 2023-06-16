@@ -23,7 +23,7 @@ responseGetRoleIdByRoleName} from './role.docs'
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
     info: {
-        title: 'User Microservice - Talent Pool',
+        title: 'User Microservice - Talent Pool prueba',
         version: '1.0.0',
         description: 'An service that provide CRUD from users and roles'
     },
