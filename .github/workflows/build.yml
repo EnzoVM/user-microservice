@@ -7,6 +7,16 @@ on:
     branches:
       - main
     types: [opened, synchronize, reopened]
+
+env:
+  AWS_APPLICATION_NAME: user-microservice
+  AWS_ENVIROMENT_NAME: User-microservice-env2
+  AWS_VERSION_LABEL: user-microservice-source
+  AWS_REGION: us-east-1
+  DOCKER_IMAGE_NAME: user-microservice
+  AWS_ECR_LINK: public.ecr.aws/j1n4i3d3/enzovm/user-microservice
+  AWS_ECR_PATH: public.ecr.aws/j1n4i3d3
+
 jobs:
   sonarcloud:
     name: SonarCloud
@@ -35,19 +45,19 @@ jobs:
         with:
           fetch-depth: 0 
       - name: Build Docker Image
-        run: docker build --no-cache --progress=plain -t user-microservice .
+        run: docker build --no-cache --progress=plain -t ${{ env.DOCKER_IMAGE_NAME }} .
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
       - name: Login to ECR
-        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1n4i3d3
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.AWS_ECR_PATH }}
       - name: Push to ECR
         run: |
-          docker tag user-microservice:latest public.ecr.aws/j1n4i3d3/enzovm/user-microservice:latest
-          docker push public.ecr.aws/j1n4i3d3/enzovm/user-microservice:latest
+          docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest ${{ env.AWS_ECR_LINK }}:latest
+          docker push ${{ env.AWS_ECR_LINK }}:latest
   elastic-beanstalk:
     name: Rebuild Elastic Beanstalk
     runs-on: ubuntu-latest
@@ -64,9 +74,10 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: user-microservice
-          environment_name: User-microservice-env2
-          version_label: latest
-          region: us-east-1
+          application_name: ${{ env.AWS_APPLICATION_NAME }}
+          environment_name: ${{ env.AWS_ENVIROMENT_NAME }}
+          version_label: ${{ env.AWS_VERSION_LABEL }}
+          region: ${{ env.AWS_REGION }}
           deployment_package: deploy.zip
+          use_existing_version_if_available: true
 
