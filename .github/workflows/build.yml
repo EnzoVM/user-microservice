@@ -35,10 +35,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Send Notification on Failure
+        if: ${{ failure() }}
         uses: teknatha136/actions-google-chat-text-message@v1.0.0
         with:
           google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          text-message: 'Prueba de mensaje en la sección SonarCloud'
+          text-message: 'Error in SonarCloud section in user microservice'
+
   docker-image-ECR:
     name: Build Docker Image and Push to ECR
     runs-on: ubuntu-latest
@@ -64,10 +66,12 @@ jobs:
           docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest ${{ env.AWS_ECR_LINK }}:latest
           docker push ${{ env.AWS_ECR_LINK }}:latest
       - name: Send Notification on Failure
+        if: ${{ failure() }}
         uses: teknatha136/actions-google-chat-text-message@v1.0.0
         with:
           google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          text-message: 'Prueba de mensaje en la sección Build Docker Image and Push to ECR'
+          text-message: 'Error in Build Docker Image and Push to ECR section in user microservice'
+
   elastic-beanstalk:
     name: Deploy Elastic Beanstalk
     runs-on: ubuntu-latest
@@ -92,8 +96,9 @@ jobs:
       #    deployment_package: deploy.zip                    # Only use if a new version is required
           use_existing_version_if_available: true
       - name: Send Notification on Failure
+        if: ${{ failure() }}
         uses: teknatha136/actions-google-chat-text-message@v1.0.0
         with:
           google-chat-webhook: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          text-message: 'Prueba de mensaje en la sección Deploy Elastic Beanstalk'
+          text-message: 'Error in Deploy Elastic Beanstalk section in user microservice'
 
