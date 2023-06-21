@@ -10,7 +10,11 @@ import swaggerSetup from './docs/swagger'
 import prisma from './connections/prisma.connection'
 import cors from 'cors'
 
+import AWSXRay from 'aws-xray-sdk'
+
 const app = express()
+
+app.use(AWSXRay.express.openSegment('user-microservice-v1'))
 
 app.set('PORT', process.env.PORT || 3000)
 app.use(express.json())
@@ -27,6 +31,8 @@ app.use('/docs', swaggerUi.serve,swaggerUi.setup(swaggerSetup))
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/roles', roleRoutes)
 app.use('/api/v1', healthRoutes)
+
+app.use(AWSXRay.express.closeSegment())
 
 prisma.$connect()
 .then(() => console.log('MySQL was connected successfully'))
