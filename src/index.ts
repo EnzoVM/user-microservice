@@ -9,19 +9,18 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerSetup from './docs/swagger'
 import prisma from './connections/prisma.connection'
 import cors from 'cors'
-
 import AWSXRay from 'aws-xray-sdk'
 
 const app = express()
-
-app.use(AWSXRay.express.openSegment('user-microservice-v1'))
 
 app.set('PORT', process.env.PORT || 3000)
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
-app.get('/', (request: Request, response: Response) =>{
+app.use(AWSXRay.express.openSegment('user-microservice-v1'))
+
+app.get('/', (_request: Request, response: Response) =>{
     response.status(201).json({
         message: 'User Microservice v1'
     }).end()
